@@ -121,7 +121,7 @@ void loop() {
     received = Serial.readStringUntil('\n');
     Serial.println(received);
       if (received == "S") {             //S stay for send
-        Serial.println("we are live");
+        // Serial.println("we are live");
         currentState = SEND;
       } else if (received == "D") {      // D stays for disconnected
         currentState = DELETE;
@@ -236,7 +236,7 @@ int readPulse() {
 //the function to write the values of the session
 void writeFile() {
   DynamicJsonDocument doc(memorySize);
-
+  
   byte buffer[memorySize];
   memset(buffer, 0, sizeof(buffer));
   
@@ -288,7 +288,7 @@ void logFileData() {
     
     // Read the data back from flash
     flash.readBuffer(address, buffer, currentAddress);
-    Serial.println(F("Data read from flash: "));
+    // Serial.println(F("Data read from flash: "));
     Serial.println((char*)buffer);
 }
 
