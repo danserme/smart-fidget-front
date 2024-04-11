@@ -1,65 +1,86 @@
-import React, { useState } from "react";
-import { generateDate, months } from "./utils/calendar";
-import dayjs from "dayjs";
-import cn from "./utils/cn";
-import { GrFormNext, GrFormPrevious } from "react-icons/gr";
+import React, { useEffect, useState } from "react";
+import Calendar from "./components/calendar/Calendar";
+import NewData from "./components/submitData/NewData";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import DeviceConnect from "./components/device/DeviceConnect";
+import Header from "./components/ui/Header";
+import AboutDevice from "./components/device/AboutDevice";
+import Footer from "./components/ui/Footer";
 
 export default function App() {
-  const days = ["M", "T", "W", "T", "F", "S", "S"];
-  const currentDate = dayjs();
-  const [today, setToday] = useState(currentDate);
-  const [selectDate, setSelectDate] = useState(currentDate);
+  const [deviceConnected, setDeviceConnected] = useState(false);
+  const [newDataAvailable, setNewDataAvailable] = useState(true);
+  const [newRequest, setNewRequest] = useState(false);
+  const [data, setData] = useState('');
 
-  return (
-    <div className="flex w-1/2 mx-auto divide-x-2 gap-10 h-screen item-center">
-      {/* make as a separate calendar component */}
-      <div className="w-96 h-96">
-        <div className="flex justify-between">
-          <h1 className="font-semibold">{months[today.month()]}, {today.year()}</h1>
-          <div className="flex items-center gap-5">
-            <GrFormPrevious className="w-5 h-5 cursor-pointer" onClick={() => {
-              setToday(today.month(today.month() - 1))
-            }} />
-            <h1 className="cursor-pointer" onClick={() => {
-              setToday(currentDate)
-              setSelectDate(currentDate)
-            }} >Today</h1>
-            <GrFormNext className="w-5 h-5 cursor-pointer" onClick={() => {
-              setToday(today.month(today.month() + 1))
-            }} />
-          </div>
-        </div>
-        <div className="w-full grid grid-cols-7 text-gray-600">
-          {days.map((day, index) => {
-            return <h1 key={index} className="h-14 grid place-content-center text-sm">{day}</h1>
-          })}
-        </div>
-        <div className="w-full grid grid-cols-7">
-          {generateDate(today.month(), today.year()).map(({ date, currentMonth, today }, index) => {
-            return (
-              <div key={index} className="h-14 border-t grid place-content-center text-sm">
-                <h1 className={cn(
-                  currentMonth ? "" : "text-gray-400",
-                  today ? "border border-red-600" : "",
-                  selectDate.toDate().toDateString() === date.toDate().toDateString() ? "bg-red-600 text-white" : "",
-                  "h-10 w-10 grid place-content-center rounded-full hover:bg-black hover:text-white transition-all cursor-pointer"
-                )}
-                onClick={() => {
-                  setSelectDate(date)
-                }}
-                >{date.date()}</h1>
+  useEffect(() => {
+    if(data) {
+      setDeviceConnected(true);
+    } else if(data.slice(1)) {
+      setNewDataAvailable(true);
+    }
+  }, [data]);
+  
+  async function connectSerial() {
+    if ("serial" in navigator) {
+      try {
+        const port = await navigator.serial.requestPort();
+        await port.open({ baudRate: 115200 });
+        const reader = port.readable.getReader();
+        const readData = async () => {
+          while (true) {
+            const { value, done } = await reader.read();
+            if (done) {
+              reader.releaseLock();
+              break;
+            }
+            // Assuming value is a TextDecoder stream
+            setData(prevData => prevData + new TextDecoder().decode(value));
+          }
+        };
+        const writer = port.writable.getWriter();
+        const connection = new TextEncoder().encode("S");
+        await writer.write(connection);
+        writer.releaseLock();
+        readData();
+      } catch (err) {
+        console.error('There was an error opening the serial port:', err);
+      }
+    }
+  }
+
+  return(
+    <div>
+      <Router>
+        <Routes>
+          <Route exact path="/" element={
+            <React.Fragment>
+              <DeviceConnect onDeviceConnected={deviceConnected} onConnectSerial={connectSerial} />
+              {data && data !== 'S' && <p>{data}</p>}
+              <p>{data}</p>
+            </React.Fragment>
+          } />
+          <Route path="/myrecords" element={
+            <React.Fragment>
+              <Header deviceConnected={deviceConnected} newDataAvailable={newDataAvailable} newRequest={newRequest} />
+              <div className="w-full flex justify-start px-10 gap-10 mt-5 mb-10">
+                <AboutDevice />
+                <Calendar />
               </div>
-            );
-          })}
-        </div>
-      </div>
-      <div className="h-96 w-96 px-5">
-        {/* make a component of history */}
-        <h1 className="font-bold">{selectDate.toDate().toDateString()}</h1>
-        {/* make a component for logged item */}
-        <h2 className="font-semibold">Time</h2>
-        <p>Details</p>
-      </div>
+            </React.Fragment>
+          } />
+          <Route path="/addData" element={
+            <React.Fragment>
+              <Header deviceConnected={deviceConnected} newRequest={newRequest} />
+              <div className="w-full flex justify-start px-10 gap-10 mt-5 mb-10">
+                <AboutDevice />
+                <NewData data={data} />
+              </div>
+            </React.Fragment>
+          } />
+        </Routes>
+        <Footer />
+      </Router>
     </div>
   );
 }
