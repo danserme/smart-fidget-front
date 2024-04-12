@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Tags from "../ui/Tags";
 import Comment from "../ui/Comment";
 

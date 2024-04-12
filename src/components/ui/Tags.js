@@ -9,7 +9,7 @@ export default function Tags({ notes, short, onNotes, tags, addOther = true, sel
         const local = notes
         local[short] = arr
         onNotes(local);
-    }, [arr]);
+    }, [arr, notes, onNotes, short]);
 
     const handleTagClick = (value) => {
         setArr(currentArr => {

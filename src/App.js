@@ -10,7 +10,8 @@ import Footer from "./components/ui/Footer";
 export default function App() {
   const [deviceConnected, setDeviceConnected] = useState(false);
   const [newDataAvailable, setNewDataAvailable] = useState(true);
-  const [newRequest, setNewRequest] = useState(false);
+  const [newRequest] = useState(false);
+  // const [newRequest, setNewRequest] = useState(false);
   const [data, setData] = useState('');
 
   useEffect(() => {
