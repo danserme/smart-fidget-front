@@ -8,11 +8,11 @@ import Session from "./Session";
 export default function NewData({ data }) {
     const sessions = ["1", "2", "3"];
     let list;
+    let combinedData;
     if (data) {
         list = data.slice(3);
         const parsedObjects = findJsonObjects(list);
-        const combinedData = parsedObjects.flatMap(obj => obj.data);
-        console.log(combinedData);
+        combinedData = parsedObjects.flatMap(obj => obj.data);
     }
     function findJsonObjects(inputString) {
         const jsonObjects = [];
@@ -51,7 +51,7 @@ export default function NewData({ data }) {
                     <Link to="/myrecords">
                         <ArrowLeft />
                     </Link>
-                    <h1 className="text-xl text-center font-bold mb-3">New Record</h1>
+                    <h1 className="text-2xl text-center font-bold mb-3">New Record</h1>
                 </div>
                 <div className="w-1/2 mx-auto">
                     <div className="w-full flex justify-between">
@@ -59,7 +59,7 @@ export default function NewData({ data }) {
                         <div className="flex gap-2"><Heart />min BPM</div>
                     </div>
                     <div className="w-full flex justify-between">
-                        <p>Total Duration of 16 min</p>
+                        <p>Total duration of 16 min</p>
                         <div className="flex gap-2"><Heart />max BPM</div>
                     </div>
                     <div className="w-full flex justify-between">
@@ -71,7 +71,16 @@ export default function NewData({ data }) {
             </header>
             <div>
                 {
-                    sessions.map((session, index) => {
+                    data && combinedData.map((session, index) => {
+                        return(
+                            <Session session={session} key={index} />
+                        )
+                    })
+                }
+            </div>
+            <div>
+                {
+                    !data && sessions.map((session, index) => {
                         return(
                             <Session session={session} key={index} />
                         )

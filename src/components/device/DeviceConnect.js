@@ -5,7 +5,6 @@ import { Navigate } from "react-router-dom";
 
 export default function DeviceConnect({ onDeviceConnected, onConnectSerial }) {
     if (onDeviceConnected === true) {
-        // Redirect to /new-path when shouldRedirect is true
         return <Navigate to="/myrecords" replace />;
     }
     return(
@@ -15,7 +14,7 @@ export default function DeviceConnect({ onDeviceConnected, onConnectSerial }) {
             </div>
             <h3 className="text-lg font-semibold">Connecting to Smart Fidget...</h3>
             <p className="p-1 italic">make sure your device is connected to your laptop via USB.</p>
-            <button className="w-1/3 mt-20 mx-auto p-2 bg-indigo-600 text-white font-semibold" onClick={() => {
+            <button className="w-1/3 mt-10 mx-auto p-2 bg-indigo-600 text-white font-semibold" onClick={() => {
                 onConnectSerial();
               }}>Connect Device</button>
             <div className="mt-5 text-indigo-700">

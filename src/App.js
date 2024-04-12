@@ -6,6 +6,8 @@ import DeviceConnect from "./components/device/DeviceConnect";
 import Header from "./components/ui/Header";
 import AboutDevice from "./components/device/AboutDevice";
 import Footer from "./components/ui/Footer";
+import LeftBlock from "./components/ui/LeftBlock";
+import SharedAccess from './components/shared/SharedAccess'
 
 export default function App() {
   const [deviceConnected, setDeviceConnected] = useState(false);
@@ -65,7 +67,7 @@ export default function App() {
             <React.Fragment>
               <Header deviceConnected={deviceConnected} newDataAvailable={newDataAvailable} newRequest={newRequest} />
               <div className="w-full flex justify-start px-10 gap-10 mt-5 mb-10">
-                <AboutDevice />
+                <LeftBlock onNewDataAvailable={newDataAvailable} address={"/myrecords"} />
                 <Calendar />
               </div>
             </React.Fragment>
@@ -74,11 +76,20 @@ export default function App() {
             <React.Fragment>
               <Header deviceConnected={deviceConnected} newRequest={newRequest} />
               <div className="w-full flex justify-start px-10 gap-10 mt-5 mb-10">
-                <AboutDevice />
+                <LeftBlock onNewDataAvailable={newDataAvailable} address={"/myrecords"} />
                 <NewData data={data} />
               </div>
             </React.Fragment>
           } />
+          <Route path="/sharedAccess" element={
+              <React.Fragment>
+                <Header deviceConnected={deviceConnected} newRequest={newRequest} />
+                <div className="w-full flex justify-start px-10 gap-10 mt-5 mb-10">
+                  <LeftBlock onNewDataAvailable={newDataAvailable} address={"/sharedAccess"} />
+                  <SharedAccess />
+                </div>
+              </React.Fragment>
+            } />
         </Routes>
         <Footer />
       </Router>
