@@ -2,20 +2,20 @@ import React from "react";
 import Question from "./Question";
 import data from '../../utils/data.json';
 import CTAButton from "../ui/buttons/CTAButton";
-import Heart from '../ui/icons/Heart'
+import Heartbeat from "../ui/Heartbeat";
 
-export default function Correlations({ notes, session, onEdit, onNotes }) {
+export default function Correlations({ notes, session, tot = 3, onEdit, onNotes }) {
     const questions = data.questions;
 
     return(
         <div>
             <main>
                 <div className="flex gap-5 content-center">
-                    <h1 className="text-xl font-bold">1/2</h1>
-                    <h3 className="text-lg font-semibold">11.00 - 11.20</h3>
-                    <div className="flex gap-2"><Heart />min BPM</div>
-                    <div className="flex gap-2"><Heart />max BPM</div>
-                    <div className="flex gap-2"><Heart />avg BPM</div>
+                <h1 className="text-xl flex font-bold">{session.id + "/" + tot}</h1>
+                    <h3 className="text-lg font-semibold">{session.startTime} – {session.endTime}</h3>
+                    <Heartbeat text={"min"} val={session.min} />
+                    <Heartbeat text={"max"} val={session.max} />
+                    <Heartbeat text={"avg"} val={session.avg} />
                 </div>
                 <div>
                     {questions.map((question)=>{

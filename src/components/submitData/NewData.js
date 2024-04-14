@@ -1,9 +1,8 @@
 import React from "react";
-import Heart from "../ui/icons/Heart";
-import ArrowLeft from "../ui/icons/ArrowLeft";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import CTAButton from "../ui/buttons/CTAButton";
 import Session from "./Session";
+import Summary from "./Summary";
 
 export default function NewData({ data, onDisconnectDevice, onSetNewDataAvailable }) {
     const navigate = useNavigate();
@@ -16,6 +15,7 @@ export default function NewData({ data, onDisconnectDevice, onSetNewDataAvailabl
     let avgHB;
     let minHB;
     let maxHB;
+    let duration;
 
     const sessions = ["1", "2", "3"];
     console.log("data", data)
@@ -64,6 +64,7 @@ export default function NewData({ data, onDisconnectDevice, onSetNewDataAvailabl
         minHB = list[0].min;
         let sum;
         for (const item in combinedData) {
+            duration += item.duration;
             if(item.min < minHB) {
                 minHB = item.min;
             }
@@ -73,39 +74,18 @@ export default function NewData({ data, onDisconnectDevice, onSetNewDataAvailabl
             sum+=item.avg;
         }
         avgHB = sum / combinedData.length;
+        duration /= (3600 * 60);
     }
     
 
     return(
         <div className="w-full border">
-            <header className="mx-auto px-2 pt-5 border-b pb-10">
-                <div>
-                    <Link to="/myrecords">
-                        <ArrowLeft />
-                    </Link>
-                    <h1 className="text-2xl text-center font-bold mb-3">New Record</h1>
-                </div>
-                <div className="w-1/2 mx-auto">
-                <div className="w-full flex justify-between">
-                        {data && <p>Date {combinedData[0].date}</p>}
-                        {!data && <p>Date 8.04.2024</p>}
-                        <div className="flex gap-2"><Heart />{avgHB && <div>{avgHB}</div>} avg BPM</div>
-                    </div>
-                    <div className="w-full flex justify-between">
-                        {data && <p>You fidgeted {combinedData.length} times</p>}
-                        {!data && <p>You fidgeted 3 times</p>}
-                        <div className="flex gap-2"><Heart />{minHB && <div>{minHB}</div>} min BPM</div>
-                    </div>
-                    <div className="w-full flex justify-between">
-                        <p>Total duration of 16 min</p>
-                        <div className="flex gap-2"><Heart />{maxHB && <div>{maxHB}</div>} max BPM</div>
-                    </div>
-                    {/* <div className="w-full flex justify-between">
-                        <p>You mostly used rotations</p>
-                        <div className="flex gap-2"><Heart />avg BPM</div>
-                    </div> */}
-                </div>
-            </header>
+            <Summary len={combinedData ? combinedData.length : 3} 
+                date={combinedData ? combinedData[0].date : "8.4.24"} 
+                avg={avgHB ? avgHB : 98} 
+                max={maxHB ? maxHB : 109} 
+                min={minHB ? minHB : 67}
+                duration={duration ? duration : 16} />
             <div>
                 {
                     data && combinedData.map((session, index) => {
