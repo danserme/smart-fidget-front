@@ -2,7 +2,7 @@ import React from "react";
 
 export default function newRequestItem({ fullname = "Mario Ricco", role = "doctor"}) {
     return (
-        <div className="flex flex-wrap content-end justify-between my-5 bg-rose-300 border border-rose-600 text-rose-600 py-3 px-5">
+        <div className="flex flex-wrap content-end justify-between my-5 bg-rose-300 border-2 border-rose-600 text-rose-600 py-3 px-5">
             <div>
                 <h3 className="text-xl font-semibold">New Request</h3>
                 <div className="mt-3 flex gap-5">

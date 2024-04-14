@@ -10,7 +10,7 @@ export default function Popup({ reason }) {
     })
 
     return(
-        <div className="w-full p-2 flex justify-between bg-amber-200 border border-amber-400 text-amber-700 font-semibold">
+        <div className="w-full p-2 flex justify-between bg-amber-200 border-2 border-amber-400 text-amber-700 font-semibold">
             <h4>{popup.text}</h4>
             <div className="flex gap-4">
                 <div>{popup.buttons.map((el,index)=>{

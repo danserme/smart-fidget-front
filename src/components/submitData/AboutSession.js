@@ -3,16 +3,25 @@ import Heart from "../ui/icons/Heart";
 import Edit from "../ui/icons/Edit";
 import Tag from "../ui/Tag";
 
-export default function AboutSession({ notes, session, onEdit, onNotes}) {
+const placeholder = {
+    startTime: "23:54:02",
+    endTime: "23:59:27",
+    min: 67,
+    max: 109,
+    avg: 98,
+    id: 1
+}
+
+export default function AboutSession({ notes, session = placeholder , onEdit, onNotes, tot = 3 }) {
     return(
         <div>
             <header className="flex justify-between">
                 <div className="flex justify-between gap-5">
-                    <h1 className="text-xl font-bold">1/2</h1>
-                    <h3 className="text-lg font-semibold">11.00 – 11.20</h3>
-                    <div className="flex gap-2"><Heart />min BPM</div>
-                    <div className="flex gap-2"><Heart />max BPM</div>
-                    <div className="flex gap-2"><Heart />avg BPM</div>
+                    <h1 className="text-xl flex font-bold">{session.id + "/" + tot}</h1>
+                    <h3 className="text-lg font-semibold">{session.startTime} – {session.endTime}</h3>
+                    <div className="flex gap-2"><Heart />{session.min} min BPM</div>
+                    <div className="flex gap-2"><Heart />{session.max} max BPM</div>
+                    <div className="flex gap-2"><Heart />{session.avg} avg BPM</div>
                 </div>
                 <div className="flex gap-2 cursor-pointer" onClick={() => {
                         onEdit(true);

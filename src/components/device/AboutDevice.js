@@ -4,7 +4,7 @@ import OnNewData from "./OnNewData";
 
 export default function AboutDevice({ onNewDataAvailable }) {
     return(
-        <div className="w-full mt-5 border h-fit">
+        <div className="w-full mt-5 border-2 h-fit">
             <div className="p-5">
                 <h1 className="text-lg font-semibold">My Device</h1>
                 <p className="text-xs text-gray-500">last used on 24.04.2024</p>
