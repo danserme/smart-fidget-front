@@ -18,47 +18,50 @@ export default function NewData({ data, onDisconnectDevice, onSetNewDataAvailabl
     let duration;
 
     const sessions = ["1", "2", "3"];
-    console.log("data", data)
+    console.log("data", data);
     let list;
     let combinedData;
     if (data) {
         list = data.slice(3);
-        console.log(list)
-        const parsedObjects = findJsonObjects(data);
-        combinedData = parsedObjects.flatMap(obj => obj.data);
+        // const parsedObjects = findJsonObjects(data);
+        // combinedData = parsedObjects.flatMap(obj => obj.data);
+        combinedData = JSON.parse(list).data;
+        console.log(combinedData);
 
         getValuesHB(combinedData);
     }
-    function findJsonObjects(inputString) {
-        const jsonObjects = [];
-        let depth = 0;
-        let objStart = -1;
-        for (let i = 0; i < inputString.length; i++) {
-            const char = inputString[i];
-            if (char === '{') {
-                depth++;
-                if (depth === 1) {
-                    // Possible start of a JSON object
-                    objStart = i;
-                }
-            } else if (char === '}') {
-                depth--;
-                if (depth === 0 && objStart !== -1) {
-                    // End of a JSON object
-                    try {
-                        const objString = inputString.substring(objStart, i + 1);
-                        const obj = JSON.parse(objString);
-                        jsonObjects.push(obj);
-                        objStart = -1; // Reset start index
-                    } catch (e) {
-                        console.error("Parsing error:", e);
-                    }
-                }
-            }
-        }
-        console.log("single obj", jsonObjects)
-        return jsonObjects;
-    }
+
+    //OLD PARSER
+    // function findJsonObjects(inputString) {
+    //     const jsonObjects = [];
+    //     let depth = 0;
+    //     let objStart = -1;
+    //     for (let i = 0; i < inputString.length; i++) {
+    //         const char = inputString[i];
+    //         if (char === '{') {
+    //             depth++;
+    //             if (depth === 1) {
+    //                 // Possible start of a JSON object
+    //                 objStart = i;
+    //             }
+    //         } else if (char === '}') {
+    //             depth--;
+    //             if (depth === 0 && objStart !== -1) {
+    //                 // End of a JSON object
+    //                 try {
+    //                     const objString = inputString.substring(objStart, i + 1);
+    //                     const obj = JSON.parse(objString);
+    //                     jsonObjects.push(obj);
+    //                     objStart = -1; // Reset start index
+    //                 } catch (e) {
+    //                     console.error("Parsing error:", e);
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     console.log("single obj", jsonObjects)
+    //     return jsonObjects;
+    // }
 
     function getValuesHB(list) {
         minHB = list[0].min;
