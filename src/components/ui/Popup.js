@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import data from "../../utils/data.json";
+import data from "../../utils/ui_data.json";
 import GhostButton from "./buttons/GhostButton";
 import Close from "./icons/Close";
 

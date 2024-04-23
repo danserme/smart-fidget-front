@@ -1,6 +1,6 @@
 import React from "react";
 import Question from "./Question";
-import data from '../../utils/data.json';
+import data from '../../utils/ui_data.json';
 import CTAButton from "../ui/buttons/CTAButton";
 import Heartbeat from "../ui/Heartbeat";
 
