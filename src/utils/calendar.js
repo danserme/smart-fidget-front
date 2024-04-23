@@ -1,7 +1,20 @@
 import dayjs from "dayjs";
+import readData from "./readData";
+
+const data = await readData();
+const recordDates = [];
+data.forEach(el => {
+    console.log(el)
+    const d = el.date.split('.')[0];
+    const m = el.date.split('.')[1];
+    const y = el.date.split('.')[2];
+    const date = new Date(parseInt("20"+y), m, d);
+    recordDates.push(dayjs(date).toDate().toDateString());
+});
+
 
 export const generateDate = (
-    month = dayjs().month(), 
+    month = dayjs().month(),
     year = dayjs().year()
 ) => {
     const firstDateOfMonth = dayjs().year(year).month(month).startOf("month");
@@ -22,7 +35,8 @@ export const generateDate = (
         arrayOfDate.push({
             currentMonth: true,
             date: firstDateOfMonth.date(i),
-            today: firstDateOfMonth.date(i).toDate().toDateString() === dayjs().toDate().toDateString()
+            today: firstDateOfMonth.date(i).toDate().toDateString() === dayjs().toDate().toDateString(),
+            hasData: recordDates.includes(firstDateOfMonth.date(i).toDate().toDateString())
         });
     }
 

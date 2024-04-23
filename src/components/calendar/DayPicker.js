@@ -9,9 +9,11 @@ export default function DayPicker({ onDateChange }) {
   const currentDate = dayjs();
   const [today, setToday] = useState(currentDate);
   const [selectDate, setSelectDate] = useState(currentDate);
+  const [recordDates, setRecordDates] = useState(null);
+
   useEffect(() => {
     onDateChange(selectDate.toDate().toDateString());
-  }, [selectDate])
+  }, [selectDate, onDateChange]);
 
   return (
     <div className="w-96 h-96">
@@ -36,12 +38,13 @@ export default function DayPicker({ onDateChange }) {
             })}
         </div>
         <div className="w-full grid grid-cols-7">
-            {generateDate(today.month(), today.year()).map(({ date, currentMonth, today }, index) => {
+            {generateDate(today.month(), today.year()).map(({ date, currentMonth, today, hasData }, index) => {
             return (
                 <div key={index} className="h-14 border-t grid place-content-center text-sm">
                 <h1 className={cn(
                     currentMonth ? "" : "text-gray-400",
                     today ? "border border-indigo-400" : "",
+                    hasData ? "border border-indigo-400" : "",
                     selectDate.toDate().toDateString() === date.toDate().toDateString() ? "bg-indigo-400 text-white" : "",
                     "h-10 w-10 grid place-content-center rounded-full hover:bg-indigo-700 hover:text-white transition-all cursor-pointer"
                 )}
